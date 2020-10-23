@@ -11,7 +11,7 @@ module.exports = (dependencyContainer) => {
   const imgResizer = dependencyContainer.imgResizer;
   return [
     {
-      path: "/images/{filename*}",
+      path: "/{filename*}",
       description: "Description",
       tags: ["api"],
       method: "GET",

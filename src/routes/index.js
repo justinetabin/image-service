@@ -1,1 +1,1 @@
-module.exports = [require("./images"), require("./upload")];
+module.exports = [require("./root"), require("./upload")];
