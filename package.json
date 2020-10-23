@@ -1,0 +1,25 @@
+{
+  "name": "image-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/main"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/boom": "^9.1.0",
+    "@hapi/hapi": "^20.0.1",
+    "@hapi/inert": "^6.0.3",
+    "@hapi/joi": "^17.1.1",
+    "@hapi/vision": "^6.0.1",
+    "aws-sdk": "^2.772.0",
+    "dotenv": "^8.2.0",
+    "hapi-swagger": "^14.0.0",
+    "joi": "^17.2.1",
+    "nodemon": "^2.0.5",
+    "sharp": "^0.26.2"
+  }
+}
