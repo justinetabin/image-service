@@ -1,8 +1,8 @@
-const { Hapi, DependencyContainer } = require("./app");
+const { DependencyContainer } = require("./app");
 
 const main = async () => {
   const container = new DependencyContainer();
-  const hapi = new Hapi(container);
+  const hapi = container.makeServer();
 
   await hapi.preRun();
   await hapi.runServer();

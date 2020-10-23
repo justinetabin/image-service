@@ -1,6 +1,7 @@
 const config = require("../config");
 const { S3Client, ImgResizer } = require("../services");
 const routes = require("../routes");
+const Hapi = require("./hapi");
 
 module.exports = class DependencyContainer {
   constructor() {
@@ -12,9 +13,10 @@ module.exports = class DependencyContainer {
       config.S3_BUCKET_NAME
     );
     this.imgResizer = new ImgResizer();
+    this.routes = routes.map((route) => route(this));
   }
 
-  makeRoutes() {
-    return routes.map((route) => route(this));
+  makeServer() {
+    return new Hapi(this.routes, this.s3client);
   }
 };
