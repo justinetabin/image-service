@@ -24,7 +24,7 @@ module.exports = (dependencyContainer) => {
       },
       handler: async ({
         payload: {
-            dirname,
+          dirname,
           file: {
             hapi: { filename, headers },
             _data,
@@ -35,6 +35,21 @@ module.exports = (dependencyContainer) => {
           filename = `${dirname}/${filename}`;
         }
         return s3.putObject(filename, _data, headers);
+      },
+    },
+
+    {
+      path: "/upload",
+      description: "Description",
+      tags: ["api"],
+      method: "DELETE",
+      validate: {
+        payload: Joi.object({
+          filename: Joi.string(),
+        }),
+      },
+      handler: async ({ payload: { filename } }) => {
+        return s3.deleteObject(filename);
       },
     },
   ];

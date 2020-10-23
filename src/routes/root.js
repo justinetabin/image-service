@@ -24,17 +24,23 @@ module.exports = (dependencyContainer) => {
       },
       handler: async ({ params: { filename }, query: { w, h, q }, hapi }) => {
         try {
-          if (new RegExp(/\.(jpe?g)$/i).test(filename)) {
-            const { Body, ContentType } = await s3.getObject(filename);
+          const { Body, ContentType } = await s3.getObject(filename);
+          const { isJpeg, isSupported } = imgResizer.checkSupportFor(filename);
+          if (isSupported) {
             var buffer = Body;
             if (w || h || q) {
-              buffer = await imgResizer.resize(Body, w, h, q);
+              if (isJpeg) {
+                buffer = await imgResizer.resizeJpeg(Body, w, h, q);
+              } else {
+                buffer = await imgResizer.resizePng(Body, w, h, q);
+              }
             }
             return hapi.response(buffer).type(ContentType);
           } else {
-            throw null;
+            return hapi.response(Body).type(ContentType);
           }
-        } catch {
+        } catch (error) {
+          console.log(error);
           return Boom.notFound();
         }
       },

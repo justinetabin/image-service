@@ -11,10 +11,24 @@ module.exports = class ImgResizer {
    * @example
    * resize(100, 100)
    */
-  resize(buffer, width, height, quality) {
+  resizeJpeg(buffer, width, height, quality) {
     return sharp(buffer)
       .resize(width, height)
       .jpeg({ quality })
       .toBuffer();
+  }
+
+  resizePng(buffer, width, height, quality) {
+    return sharp(buffer)
+      .resize(width, height)
+      .png({ quality })
+      .toBuffer();
+  }
+
+  checkSupportFor(filename) {
+    return {
+      isSupported: new RegExp(/\.(jpe?g|png)$/i).test(filename),
+      isJpeg: new RegExp(/\.(jpe?g)$/i).test(filename)
+    }
   }
 };

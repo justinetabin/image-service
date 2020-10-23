@@ -89,11 +89,10 @@ module.exports = class Server {
   // Lifecycle
 
   async preRun() {
-    console.log("Checking health of S3 ...");
+    this.addRoutes();
+    
+    console.log(`Checking health of S3 on ${config.S3_ENDPOINT} `);
     await this.s3client.getOrCreateBucket(config.S3_BUCKET_NAME);
-
-    console.log("Adding routes ...");
-    await this.addRoutes();
 
     config.NODE_ENV === "development"
       ? await (() => {

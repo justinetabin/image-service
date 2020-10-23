@@ -67,8 +67,24 @@ module.exports = class S3Client {
   }
 
   /**
+   * 
+   * @param {string} filename 
+   */
+  deleteObject(filename) {
+    const params = {
+      Bucket: this.bucketName,
+      Key: filename,
+    };
+    return new Promise((resolve, reject) => {
+      this.s3.deleteObject(params, (err, data) => {
+        if (err) reject(err);
+        else resolve(data);
+      });
+    });
+  }
+
+  /**
    *
-   * @param {string} bucketName
    * @param {string} acl
    * Possible acl values include:
    * "private"
@@ -80,9 +96,9 @@ module.exports = class S3Client {
    * createBucket("yourbucketname")
    * createBucket("yourbucketname", "private")
    */
-  createBucket(bucketName, acl = "public-read") {
+  createBucket(acl = "public-read") {
     var params = {
-      Bucket: bucketName,
+      Bucket: this.bucketName,
       ACL: acl,
     };
     return new Promise((resolve, reject) => {
@@ -95,9 +111,8 @@ module.exports = class S3Client {
 
   /**
    *
-   * @param {string} bucketName
    */
-  getBucket(bucketName) {
+  getBucket() {
     return new Promise((resolve, reject) => {
       this.s3.listBuckets((err, data) => {
         if (err) reject(err);
@@ -105,7 +120,7 @@ module.exports = class S3Client {
           const buckets = data.Buckets;
           const index = buckets
             .map((Bucket) => Bucket.Name)
-            .indexOf(bucketName);
+            .indexOf(this.bucketName);
           if (index > -1) {
             resolve(buckets[index]);
           } else {
@@ -116,10 +131,13 @@ module.exports = class S3Client {
     });
   }
 
-  async getOrCreateBucket(bucketName) {
+  /**
+   *
+   */
+  async getOrCreateBucket() {
     var bucket;
     try {
-      bucket = await this.getBucket(bucketName);
+      bucket = await this.getBucket(this.bucketName);
       return bucket;
     } catch (error) {
       console.log("Buckets does not exists");
@@ -127,7 +145,7 @@ module.exports = class S3Client {
 
     if (bucket == null) {
       console.log("Creating buckets");
-      return await this.createBucket(bucketName);
+      return await this.createBucket(this.bucketName);
     }
   }
 };
